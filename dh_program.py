@@ -9,7 +9,8 @@
 # https://docs.python.org/3/library/functions.html#hex
 # https://en.wikipedia.org/wiki/XOR_cipher#:~:text=This%20operation%20is%20sometimes%20
 #  called,key%20will%20remove%20the%20cipher.
-# 
+# Note: Copilot was used to assist in specifically brainstorming and debugging how to generate n 
+# bytes while ensuring rollback resistance. 
 
 import hashlib
 import secrets
@@ -43,15 +44,19 @@ class SecurePRNG:
     def __init__(self, seed_int):
         # Initalize the SecurePRNG with the shared secret (seed_int) calculated from 
         # Diffie-Hellman key exchange.
+        # Converted the seed integer to bytes for use in hashing and updating the state.
         self.seed_init = seed_int.to_bytes((seed_int.bit_length() + 7) // 8, byteorder='big')
     def generate(self, n_bytes):
         # TODO: Generates n bytes while ensuring Rollback Resistance.
         output = b""
         while len(output) < n_bytes:
             # 1. Produce keystream block from current state
+            # Using SHA-256 to produce a block from the current seed state.
             block = hashlib.sha256(self.seed_init).digest()
             output += block
             # 2. Update state immediately after with a hash function (One-way progression)
+            # block is appended to the seed to ensure that the state changes with each generation, 
+            # preventing rollback attacks.
             self.seed_init = hashlib.sha256(self.seed_init + block).digest()
 
         return output[:n_bytes]

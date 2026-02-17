@@ -49,7 +49,7 @@ class SecurePRNG:
         output = b""
         while len(output) < n_bytes:
             # 1. Produce keystream block from current state
-            block = hashlib.sha256(self.seed_init + b"output_block").digest()
+            block = hashlib.sha256(self.seed_init).digest()
             output += block
             # 2. Update state immediately after with a hash function (One-way progression)
             self.seed_init = hashlib.sha256(self.seed_init + block).digest()

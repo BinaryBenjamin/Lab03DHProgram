@@ -114,7 +114,7 @@ class Mallory:
                 # Prints the plaintext message to the console for Mallory's spying purposes
                 print(f"Decrypted Message: {decrypted.decode()}")
                 # Modifies the plaintext message in some way
-                modified = decrypted.replace(b"9pm", b"3am")
+                modified = decrypted.replace(b"Dragons", b"Wyverns")
                 # Uses the PRNG shared with Bob to re-encrypt and return the message for Bob.
                 return SecurePRNG.xor_crypt(modified, self.bob_prng)
             
@@ -125,7 +125,7 @@ class Mallory:
                 # Prints the plaintext message to the console for Mallory's spying purposes
                 print(f"Decrypted Message: {decrypted.decode()}")
                 # Modifies the plaintext message in some way
-                modified = decrypted.replace(b"9pm", b"3am")
+                modified = decrypted.replace(b"Dragons", b"Wyverns")
                 # Uses the PRNG shared with Alice to re-encrypt and return the message for Alice.
                 return SecurePRNG.xor_crypt(modified, self.alice_prng)
 
@@ -208,14 +208,14 @@ def main():
     print(" [Bob Session]: S_bm = (Mallory_Pub)^b mod P")
     
     print_step("Step 4: Interception")
-    message = b"Meet me at 9pm."
+    message = b"The Dragons have gone flying."
     encrypted_msg = SecurePRNG.xor_crypt(message, alice.session_prng)
     delivered_data = net.send("Alice", "Bob", encrypted_msg)
     
     final_message = SecurePRNG.xor_crypt(delivered_data, bob.session_prng)
     print_info("Bob received", final_message.decode())
     
-    if b"3am" in final_message:
+    if b"Wyverns" in final_message:
         print("\n[DANGER] MITM SUCCESS: Mallory used her private key (m) to decrypt and" 
               "re-encrypt.")
 

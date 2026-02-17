@@ -1,6 +1,15 @@
 # Diffie-Hellman Key Exchange Simulation with MITM Attack
 # Authors: Benjamin LaCroix, the template creator
 # Course: ITIS 3200-002, Spring 2026
+# Primary Sources: 
+# https://docs.python.org/3/library/hashlib.html
+# https://docs.python.org/3/library/secrets.html
+# https://docs.python.org/3/library/stdtypes.html#str.replace
+# https://docs.python.org/3/library/functions.html#pow
+# https://docs.python.org/3/library/functions.html#hex
+# https://en.wikipedia.org/wiki/XOR_cipher#:~:text=This%20operation%20is%20sometimes%20
+#  called,key%20will%20remove%20the%20cipher.
+# 
 
 import hashlib
 import secrets
@@ -55,7 +64,7 @@ class Entity:
     # Calculates public and private keys with global P and G.
     def __init__(self, name):
         self.name = name
-        self.private_key = secrets.randbelow(P - 1) + 1 # random secret integer
+        self.private_key = secrets.randbelow(P) # random secret integer
         self.public_key = pow(G, self.private_key, P)
         self.session_prng = None
     def get_public_hex(self):
@@ -83,7 +92,7 @@ class Network:
 
 class Mallory:
     def __init__(self):
-        self.private_key = secrets.randbelow(P - 1) + 1 # random secret integer
+        self.private_key = secrets.randbelow(P) # random secret integer
         self.public_hex = pow(G, self.private_key, P)
         # Mallory maintains TWO sessions
         self.alice_prng = None
